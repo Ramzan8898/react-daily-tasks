@@ -1,12 +1,7 @@
 body {
-  background-color: blueviolet;
+  background-color: rgb(100, 10, 184);
 }
-.container {
-  display: flex;
-  justify-content: center;
-  align-self: center;
 
-}
 .container input {
   background: transparent;
 
@@ -18,5 +13,9 @@ body {
   border: 3px solid;
   border-color:rgb(243, 165, 9);
   box-shadow: none;
+  transition: all ease-in ;
+}
 
+.container input::placeholder {
+  color: white;
 }
