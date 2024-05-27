@@ -2,7 +2,7 @@ body {
   background-color: rgb(100, 10, 184);
 }
 
-.container input {
+.container input:first {
   background: transparent;
   outline: 2px solid white;
 }
