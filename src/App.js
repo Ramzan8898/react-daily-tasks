@@ -1,13 +1,17 @@
-import React, { Component } from 'react'
-
+import React from 'react'
+import { IoIosAddCircle } from "react-icons/io";
 import './App.css';
 
-class App extends Component {
+class App extends React.Component {
 
-  state = {
-    tasks: [],
-    input: ''
+  constructor() {
+    super()
+    this.state = {
+      tasks: [],
+      input: ''
+    }
   }
+
 
   componentDidMount() {
     const savedTodos = localStorage.getItem('tasks');
@@ -16,8 +20,10 @@ class App extends Component {
     }
   }
 
-  componentDidUpdate() {
-    localStorage.setItem('todos', JSON.stringify(this.state.tasks));
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.tasks !== this.state.tasks) {
+      localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+    }
   }
   addTodo = () => {
     const { tasks, input } = this.state;
@@ -25,19 +31,22 @@ class App extends Component {
       this.setState({
         tasks: [...tasks, input],
         input: ''
-      })
+      },
+        () => {
+          localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+        }
+      )
     }
   }
 
   render() {
-    const { tasks, input } = this.state;
 
     return <>
 
-      <div className="container my-5 d-flex justify-content-evenly">
-        <input type="text" placeholder='Your Task' className='form-control w-50 p-3 '
-          name='task' value={input} onChange={(e) => this.setState({ input: e.target.value })} />
-        <button className='btn btn-warning ' onClick={this.addTodo}>Add</button>
+      <div className="container my-5 d-flex ">
+        <input type="text" placeholder='Your Task' className='form-control w-50 p-2'
+          name='task' value={this.state.input} onChange={(e) => this.setState({ input: e.target.value })} />
+        <IoIosAddCircle onClick={this.addTodo} style={{ fontSize: '45px', color: 'white', cursor: 'pointer', marginLeft: '20px' }} />
       </div>
       <div className='container' >
         <table className='table table-dark table-hover border-primary w-25 rounded-pil'>
@@ -45,13 +54,13 @@ class App extends Component {
             <tr>
               <th className='h4'>#</th>
               <th scope="col">
-                <h4 className='text-center text-white'>Daily Tasks</h4>
+                <h5 className=' text-white'>Tasks</h5>
               </th>
             </tr>
           </thead>
-          {tasks.length !== 0 ? (
+          {this.state.tasks.length !== 0 ? (
             <tbody className='w-100'>
-              {tasks.map((task, index) => (
+              {this.state.tasks.map((task, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{task}</td>
