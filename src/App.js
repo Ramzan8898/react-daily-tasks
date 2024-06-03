@@ -14,7 +14,8 @@ class App extends React.Component {
       editIndex: null,
       editInput: '',
       hoveredRowIndex: null,
-      isContentEditable: false
+      isContentEditable: false,
+      isHidden: ""
     }
   }
 
@@ -57,7 +58,9 @@ class App extends React.Component {
   }
 
   cloneTable = () => {
-    alert("i am cilcked");
+    document.querySelector("#title_input").classList.add('d-block');
+    document.querySelector("#title_input").classList.remove('d-none');
+
   }
 
   addTodo = () => {
@@ -80,7 +83,7 @@ class App extends React.Component {
     this.setState({ tasks: updatedTasks });
   }
 
-  
+
 
   render() {
 
@@ -90,63 +93,57 @@ class App extends React.Component {
         <input type="text" placeholder='Your Task' className='form-control w-50 p-2'
           name='task' value={this.state.input} onChange={(e) => this.setState({ input: e.target.value })} />
         <IoIosAddCircle onClick={this.addTodo} style={{ fontSize: '45px', color: 'white', cursor: 'pointer', marginLeft: '20px' }} />
-        <MdFactCheck style={{ fontSize: '45px', color: 'white', cursor: 'pointer', marginLeft: '20px' }} onClick={this.cloneTable}/>
+        <MdFactCheck style={{ fontSize: '45px', color: 'white', cursor: 'pointer', marginLeft: '20px' }} onClick={this.cloneTable} />
+        <input type="text" id='title_input' className='d-none form-control w-25' />
       </div>
-      <div className='container p-3' >
-        <table  className='table table-hover table-dark ' style={{ tableLayout: 'fixed', width: '300px' }}>
-
-            <thead>
-              <tr>
-                <th style={{ width: "30px" }}>#</th>
-                <th className='text-center'>Task</th>
-                <th style={{ width: "70px" }}>Actions</th>
-              </tr>
-            </thead>
-            {this.state.tasks.length !== 0 ? (
-              <tbody className='w-100'>
-                {this.state.tasks.map((task, index) => (
-                  <tr
-                    key={index}
-                    onMouseEnter={() => this.handleMouseEnter(index)}
-                    onMouseLeave={this.handleMouseLeave}
-                  >
-                    <td style={{ wordWrap: 'break-word' }}>{index + 1}</td>
-                    <td style={{ wordWrap: 'break-word', textAlign: 'left' }}>
-                      {this.state.editIndex === index ? (
-                        <input
-                          style={{ width: "150px", background: 'white', outline: '0px', border: '0px', color: "black", caretColor: "red" }}
-                          type="text"
-                          value={this.state.editInput}
-                          onChange={this.handleEditChange}
-                          onBlur={() => this.saveEdit(index)}
-                          onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                              this.saveEdit(index);
-                            }
-                          }}
-                        />
-                      ) : (
-                        task
-                      )}
-                    </td>
-                    <td>
-                      {this.state.hoveredRowIndex === index && (
-                        <>
-                          <GrEdit onClick={() => this.handleEdit(index)} style={{ cursor: 'pointer' }} />
-                          <GrTrash onClick={() => this.handleDelete(index)} style={{ cursor: 'pointer', margin: '0px 10px 0px 10px' }} />
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            ) : (
-              <tbody>
-                <tr>
-                  <td colSpan="3">No todos found.</td>
+      <div className='container' >
+        <h4>Names</h4>
+        <table className='table table-hover table-dark bg-dark' style={{ tableLayout: 'fixed', width: '300px' }}>
+          {this.state.tasks.length !== 0 ? (
+            <tbody className='w-100'>
+              {this.state.tasks.map((task, index) => (
+                <tr
+                  key={index}
+                  onMouseEnter={() => this.handleMouseEnter(index)}
+                  onMouseLeave={this.handleMouseLeave}
+                >
+                  <td style={{ wordWrap: 'break-word' }}>{index + 1}</td>
+                  <td style={{ wordWrap: 'break-word', textAlign: 'left' }}>
+                    {this.state.editIndex === index ? (
+                      <input
+                        style={{ width: "150px", background: 'white', outline: '0px', border: '0px', color: "black", caretColor: "red" }}
+                        type="text"
+                        value={this.state.editInput}
+                        onChange={this.handleEditChange}
+                        onBlur={() => this.saveEdit(index)}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            this.saveEdit(index);
+                          }
+                        }}
+                      />
+                    ) : (
+                      task
+                    )}
+                  </td>
+                  <td>
+                    {this.state.hoveredRowIndex === index && (
+                      <>
+                        <GrEdit onClick={() => this.handleEdit(index)} style={{ cursor: 'pointer' }} />
+                        <GrTrash onClick={() => this.handleDelete(index)} style={{ cursor: 'pointer', margin: '0px 10px 0px 10px' }} />
+                      </>
+                    )}
+                  </td>
                 </tr>
-              </tbody>
-            )}
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan="3">No todos found.</td>
+              </tr>
+            </tbody>
+          )}
 
         </table>
 
